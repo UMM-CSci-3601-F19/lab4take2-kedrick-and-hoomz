@@ -1,4 +1,4 @@
-package umm3601.user;
+package umm3601.todo;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
@@ -15,39 +15,39 @@ import java.util.stream.StreamSupport;
 import static com.mongodb.client.model.Filters.eq;
 
 /**
- * Controller that manages requests for info about users.
+ * Controller that manages requests for info about todos.
  */
-public class UserController {
+public class TodoController {
 
-  private final MongoCollection<Document> userCollection;
+  private final MongoCollection<Document> todoCollection;
 
   /**
-   * Construct a controller for users.
+   * Construct a controller for todos.
    *
-   * @param database the database containing user data
+   * @param database the database containing to-do data
    */
-  public UserController(MongoDatabase database) {
-    userCollection = database.getCollection("users");
+  public TodoController(MongoDatabase database) {
+    todoCollection = database.getCollection("todos");
   }
 
   /**
-   * Helper method that gets a single user specified by the `id`
+   * Helper method that gets a single to-do specified by the `id`
    * parameter in the request.
    *
-   * @param id the Mongo ID of the desired user
-   * @return the desired user as a JSON object if the user with that ID is found,
-   * and `null` if no user with that ID is found
+   * @param id the Mongo ID of the desired to-do
+   * @return the desired to-do as a JSON object if the to-do with that ID is found,
+   * and `null` if no to-do with that ID is found
    */
-  public String getUser(String id) {
-    FindIterable<Document> jsonUsers
-      = userCollection
+  public String getTodo(String id) {
+    FindIterable<Document> jsonTodos
+      = todoCollection
       .find(eq("_id", new ObjectId(id)));
-    Iterator<Document> iterator = jsonUsers.iterator();
+    Iterator<Document> iterator = jsonTodos.iterator();
     if (iterator.hasNext()) {
-      Document user = iterator.next();
-      return user.toJson();
+      Document todo = iterator.next();
+      return todo.toJson();
     } else {
-      // We didn't find the desired user
+      // We didn't find the desired to-do
       return null;
     }
   }
@@ -60,9 +60,9 @@ public class UserController {
    * specified age are found.
    *
    * @param queryParams the query parameters from the request
-   * @return an array of Users in a JSON formatted string
+   * @return an array of Todos in a JSON formatted string
    */
-  public String getUsers(Map<String, String[]> queryParams) {
+  public String getTodos(Map<String, String[]> queryParams) {
 
     Document filterDoc = new Document();
 
@@ -80,9 +80,9 @@ public class UserController {
     }
 
     //FindIterable comes from mongo, Document comes from Gson
-    FindIterable<Document> matchingUsers = userCollection.find(filterDoc);
+    FindIterable<Document> matchingTodos = todoCollection.find(filterDoc);
 
-    return serializeIterable(matchingUsers);
+    return serializeIterable(matchingTodos);
   }
 
   /*
@@ -98,26 +98,26 @@ public class UserController {
 
 
   /**
-   * Helper method which appends received user information to the to-be added document
+   * Helper method which appends received to-do information to the to-be added document
    *
-   * @param name the name of the new user
-   * @param age the age of the new user
-   * @param company the company the new user works for
-   * @param email the email of the new user
-   * @return boolean after successfully or unsuccessfully adding a user
+   * @param name the name of the new to-do
+   * @param age the age of the new to-do
+   * @param company the company the new to-do works for
+   * @param email the email of the new to-do
+   * @return boolean after successfully or unsuccessfully adding a to-do
    */
-  public String addNewUser(String name, int age, String company, String email) {
+  public String addNewTodo(String name, int age, String company, String email) {
 
-    Document newUser = new Document();
-    newUser.append("name", name);
-    newUser.append("age", age);
-    newUser.append("company", company);
-    newUser.append("email", email);
+    Document newTodo = new Document();
+    newTodo.append("name", name);
+    newTodo.append("age", age);
+    newTodo.append("company", company);
+    newTodo.append("email", email);
 
     try {
-      userCollection.insertOne(newUser);
-      ObjectId id = newUser.getObjectId("_id");
-      System.err.println("Successfully added new user [_id=" + id + ", name=" + name + ", age=" + age + " company=" + company + " email=" + email + ']');
+      todoCollection.insertOne(newTodo);
+      ObjectId id = newTodo.getObjectId("_id");
+      System.err.println("Successfully added new todo [_id=" + id + ", name=" + name + ", age=" + age + " company=" + company + " email=" + email + ']');
       return id.toHexString();
     } catch (MongoException me) {
       me.printStackTrace();
