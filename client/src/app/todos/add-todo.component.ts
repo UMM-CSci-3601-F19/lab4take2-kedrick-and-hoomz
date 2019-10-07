@@ -15,26 +15,26 @@ export class AddTodoComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { todo: Todo }, private fb: FormBuilder) {
   }
 
-  // not sure if this name is magical and making it be found or if I'm missing something,
+  // not sure if this owner is magical and making it be found or if I'm missing something,
   // but this is where the red text that shows up (when there is invalid input) comes from
   add_todo_validation_messages = {
-    'name': [
-      {type: 'required', message: 'Name is required'},
-      {type: 'minlength', message: 'Name must be at least 2 characters long'},
-      {type: 'maxlength', message: 'Name cannot be more than 25 characters long'},
-      {type: 'pattern', message: 'Name must contain only numbers and letters'},
-      {type: 'existingName', message: 'Name has already been taken'}
+    'owner': [
+      {type: 'required', message: 'Owner is required'},
+      {type: 'minlength', message: 'Owner must be at least 2 characters long'},
+      {type: 'maxlength', message: 'Owner cannot be more than 25 characters long'},
+      {type: 'pattern', message: 'Owner must contain only numbers and letters'},
+      {type: 'existingOwner', message: 'Owner has already been taken'}
     ],
 
-    'age': [
-      {type: 'pattern', message: 'Age must be a number'},
-      {type: 'min', message: 'Age must be at least 15'},
-      {type: 'max', message: 'Age may not be greater than 200'},
-      {type: 'required', message: 'Age is required'}
+    'Status': [
+      {type: 'pattern', message: 'Status must be a number'},
+      {type: 'min', message: 'Status must be at least 15'},
+      {type: 'max', message: 'Status may not be greater than 200'},
+      {type: 'required', message: 'Status is required'}
     ],
 
-    'email': [
-      {type: 'email', message: 'Email must be formatted properly'}
+    'category': [
+      {type: 'category', message: 'Category must be formatted properly'}
     ]
   };
 
@@ -42,7 +42,7 @@ export class AddTodoComponent implements OnInit {
 
     // add to-do form validations
     this.addTodoForm = this.fb.group({
-      // We allow alphanumeric input and limit the length for name.
+      // We allow alphanumeric input and limit the length for owner.
       owner: new FormControl('owner', Validators.compose([
         Validators.minLength(2),
         Validators.maxLength(25),
@@ -50,18 +50,18 @@ export class AddTodoComponent implements OnInit {
         Validators.required
       ])),
 
-      // Since this is for a company, we need workers to be old enough to work, and probably not older than 200.
+      // Since this is for a body, we need workers to be old enough to work, and probably not older than 200.
       status: new FormControl('status', Validators.compose([
         StatusValidator.validStatus,
         Validators.required
       ])),
 
-      // We don't care much about what is in the company field, so we just add it here as part of the form
+      // We don't care much about what is in the body field, so we just add it here as part of the form
       // without any particular validation.
-      body: new FormControl('company'),
+      body: new FormControl('body'),
 
-      // We don't need a special validator just for our app here, but there is a default one for email.
-      category: new FormControl('email', Validators.email)
+      // We don't need a special validator just for our app here, but there is a default one for category.
+      category: new FormControl('category')
     });
 
   }
