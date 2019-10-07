@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {AddTodoComponent} from './add-todo.component';
 
 @Component({
-  selector: 'todo-list-component',
+  selector: 'app-todo-list-component',
   templateUrl: 'todo-list.component.html',
   styleUrls: ['./todo-list.component.css'],
 })
