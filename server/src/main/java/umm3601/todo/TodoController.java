@@ -55,9 +55,9 @@ public class TodoController {
 
   /**
    * Helper method which iterates through the collection, receiving all
-   * documents if no query parameter is specified. If the age query parameter
+   * documents if no query parameter is specified. If the status query parameter
    * is specified, then the collection is filtered so only documents of that
-   * specified age are found.
+   * specified status are found.
    *
    * @param queryParams the query parameters from the request
    * @return an array of Todos in a JSON formatted string
@@ -66,17 +66,17 @@ public class TodoController {
 
     Document filterDoc = new Document();
 
-    if (queryParams.containsKey("age")) {
-      int targetAge = Integer.parseInt(queryParams.get("age")[0]);
-      filterDoc = filterDoc.append("age", targetAge);
+    if (queryParams.containsKey("status")) {
+      boolean targetStatus = Boolean.parseBoolean(queryParams.get("status")[0]);
+      filterDoc = filterDoc.append("status", targetStatus);
     }
 
-    if (queryParams.containsKey("company")) {
-      String targetContent = (queryParams.get("company")[0]);
+    if (queryParams.containsKey("body")) {
+      String targetContent = (queryParams.get("body")[0]);
       Document contentRegQuery = new Document();
       contentRegQuery.append("$regex", targetContent);
       contentRegQuery.append("$options", "i");
-      filterDoc = filterDoc.append("company", contentRegQuery);
+      filterDoc = filterDoc.append("body", contentRegQuery);
     }
 
     //FindIterable comes from mongo, Document comes from Gson
@@ -100,24 +100,24 @@ public class TodoController {
   /**
    * Helper method which appends received to-do information to the to-be added document
    *
-   * @param name the name of the new to-do
-   * @param age the age of the new to-do
-   * @param company the company the new to-do works for
-   * @param email the email of the new to-do
+   * @param owner the owner of the new to-do
+   * @param status the status of the new to-do
+   * @param body the body the new to-do works for
+   * @param category the category of the new to-do
    * @return boolean after successfully or unsuccessfully adding a to-do
    */
-  public String addNewTodo(String name, int age, String company, String email) {
+  public String addNewTodo(String owner, boolean status, String body, String category) {
 
     Document newTodo = new Document();
-    newTodo.append("name", name);
-    newTodo.append("age", age);
-    newTodo.append("company", company);
-    newTodo.append("email", email);
+    newTodo.append("owner", owner);
+    newTodo.append("status", status);
+    newTodo.append("body", body);
+    newTodo.append("category", category);
 
     try {
       todoCollection.insertOne(newTodo);
       ObjectId id = newTodo.getObjectId("_id");
-      System.err.println("Successfully added new todo [_id=" + id + ", name=" + name + ", age=" + age + " company=" + company + " email=" + email + ']');
+      System.err.println("Successfully added new todo [_id=" + id + ", owner=" + owner + ", status=" + status + " body=" + body + " category=" + category + ']');
       return id.toHexString();
     } catch (MongoException me) {
       me.printStackTrace();
