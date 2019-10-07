@@ -1,4 +1,4 @@
-packstatus umm3601.todo;
+package umm3601.todo;
 
 import org.bson.Document;
 import spark.Request;
