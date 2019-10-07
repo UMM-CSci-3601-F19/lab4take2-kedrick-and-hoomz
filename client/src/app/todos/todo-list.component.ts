@@ -17,10 +17,10 @@ export class TodoListComponent implements OnInit {
   public filteredTodos: Todo[];
 
   // These are the target values used in searching.
-  // We should rename them to make that clearer.
-  public todoName: string;
-  public todoAge: number;
-  public todoCompany: string;
+  // We should reowner them to make that clearer.
+  public todoOwner: string;
+  public todoStatus: boolean;
+  public todoBody: string;
 
   // The ID of the
   private highlightedID: string = '';
@@ -35,12 +35,13 @@ export class TodoListComponent implements OnInit {
   }
 
   openDialog(): void {
-    const newTodo: Todo = {_id: '', name: '', age: -1, company: '', email: ''};
+    const newTodo: Todo = {_id: '', owner: '', status: false, body: '', category: ''};
     const dialogRef = this.dialog.open(AddTodoComponent, {
       width: '500px',
       data: {todo: newTodo}
     });
 
+    // tslint:disable-next-line:no-shadowed-variable
     dialogRef.afterClosed().subscribe(newTodo => {
       if (newTodo != null) {
         this.todoListService.addNewTodo(newTodo).subscribe(
@@ -58,13 +59,13 @@ export class TodoListComponent implements OnInit {
     });
   }
 
-  public updateName(newName: string): void {
-    this.todoName = newName;
+  public updateOwner(newOwner: string): void {
+    this.todoOwner = newOwner;
     this.updateFilter();
   }
 
-  public updateAge(newAge:number): void {
-    this.todoAge = newAge;
+  public updateStatus(newStatus: boolean): void {
+    this.todoStatus = newStatus;
     this.updateFilter();
   }
 
@@ -72,8 +73,8 @@ export class TodoListComponent implements OnInit {
     this.filteredTodos =
       this.todoListService.filterTodos(
         this.todos,
-        this.todoName,
-        this.todoAge
+        this.todoOwner,
+        this.todoStatus
       );
   }
 
@@ -101,7 +102,7 @@ export class TodoListComponent implements OnInit {
   }
 
   loadService(): void {
-    this.todoListService.getTodos(this.todoCompany).subscribe(
+    this.todoListService.getTodos(this.todoBody).subscribe(
       todos => {
         this.todos = todos;
         this.filteredTodos = this.todos;
