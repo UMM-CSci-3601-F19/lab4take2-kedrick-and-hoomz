@@ -19,11 +19,12 @@ export class TodoListComponent implements OnInit {
   // These are the target values used in searching.
   // We should reowner them to make that clearer.
   public todoOwner: string;
-  public todoStatus: boolean;
+  public todoStatus: string;
   public todoBody: string;
+  public todoCategory: string;
 
   // The ID of the
-  private highlightedID: string = '';
+  private highlightedID = '';
 
   // Inject the TodoListService into this component.
   constructor(public todoListService: TodoListService, public dialog: MatDialog) {
@@ -64,8 +65,18 @@ export class TodoListComponent implements OnInit {
     this.updateFilter();
   }
 
-  public updateStatus(newStatus: boolean): void {
+  public updateStatus(newStatus: string): void {
     this.todoStatus = newStatus;
+    this.updateFilter();
+  }
+
+  public updateCategory(newCategory: string): void {
+    this.todoCategory = newCategory;
+    this.updateFilter();
+  }
+
+  public updateBody(newBody: string): void {
+    this.todoBody = newBody;
     this.updateFilter();
   }
 
@@ -74,8 +85,8 @@ export class TodoListComponent implements OnInit {
       this.todoListService.filterTodos(
         this.todos,
         this.todoOwner,
-        this.todoStatus
-      );
+        this.todoStatus,
+        this.todoBody);
   }
 
   /**

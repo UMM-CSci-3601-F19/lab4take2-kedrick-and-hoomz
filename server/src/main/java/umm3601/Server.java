@@ -71,6 +71,9 @@ public class Server {
     get("api/users/:id", userRequestHandler::getUserJSON);
     post("api/users/new", userRequestHandler::addNewUser);
 
+    /// To-do Endpoints ///////////////////////////
+    /////////////////////////////////////////////
+
     get("api/todos", todoRequestHandler::getTodos);
     get("api/todos/:id", todoRequestHandler::getTodoJSON);
     post("api/todos/new", todoRequestHandler::addNewTodo);
