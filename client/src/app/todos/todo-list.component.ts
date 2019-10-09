@@ -24,7 +24,7 @@ export class TodoListComponent implements OnInit {
   public todoBody: string;
 
   // The ID of the
-  private highlightedID: string = '';
+  private highlightedID = '';
 
   // Inject the TodoListService into this component.
   constructor(public todoListService: TodoListService, public dialog: MatDialog) {

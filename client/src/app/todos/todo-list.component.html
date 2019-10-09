@@ -25,14 +25,7 @@
             placeholder="Filter by status"
             (input)="updateStatus($event.target.value)">
         </mat-form-field>
-        <mat-form-field>
-          <input
-            matInput
-            id="todoCategory" #input
-            type="text"
-            placeholder="Filter by category"
-            (input)="updateCategory($event.target.value)">
-        </mat-form-field>
+
         <mat-form-field>
           <input
             matInput
@@ -41,8 +34,14 @@
             placeholder="Filter by body"
             (input)="updateBody($event.target.value)">
         </mat-form-field>
-        <button mat-raised-button id="submit" color="primary" #input type="button" (click)="loadService()">Submit
-        </button>
+        <mat-form-field>
+          <input
+            matInput
+            id="todoCategory" #input
+            type="text"
+            placeholder="Filter by category"
+            (input)="updateCategory($event.target.value)">
+        </mat-form-field>
 
         <mat-accordion *ngIf="todos; else todosError">
           <mat-expansion-panel #elem class="todos" [id]="todo.body" [expanded]="this.isHighlighted(todo)"
