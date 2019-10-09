@@ -1,53 +1,62 @@
+<div>
+  <button id="addNewTodo" mat-raised-button (click)="openDialog()">Add New Todo</button>
+</div>
+
+
 <div layout-gt-sm="row">
   <div flex-gt-sm="80" flex-offset-gt-sm="10">
     <mat-card>
-      <mat-card-title id="todo-list-title">Todo</mat-card-title>
-
+      <mat-card-title id="todo-list-title">Todos</mat-card-title>
       <mat-divider></mat-divider>
       <mat-card-content>
         <mat-form-field>
           <input
-            matTooltip="Barry / Blanche / Dawn / Fry / Roberta / Workman"
             matInput
-            id="todoOwner"
+            id="todoOwner" #input
+            type="text"
             placeholder="Filter by owner"
             (input)="updateOwner($event.target.value)">
         </mat-form-field>
-
         <mat-form-field>
           <input
             matInput
-            id="todoBody"
-            type="text"
-            placeholder="Filter by Body"
-            (input)="updateBody($event.target.value)">
-        </mat-form-field>
-        <!--<mat-form-field>-->
-        <!--<input matInput id="todoCompany" #input type="text" placeholder="Search for company" (input)="contentChange($event.target.value)">-->
-        <!--</mat-form-field>-->
-        <mat-form-field>
-          <input
-            matTooltip="Complete / Incomplete"
-            matInput
-            id="todoStatus"
-            type="text"
-            placeholder="Filter by Status"
+            id="todoStatus" #input
+            type="boolean"
+            placeholder="Filter by status"
             (input)="updateStatus($event.target.value)">
         </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            id="todoCategory" #input
+            type="text"
+            placeholder="Filter by category"
+            (input)="updateCategory($event.target.value)">
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            id="todoBody" #input
+            type="text"
+            placeholder="Filter by body"
+            (input)="updateBody($event.target.value)">
+        </mat-form-field>
+        <button mat-raised-button id="submit" color="primary" #input type="button" (click)="loadService()">Submit
+        </button>
 
         <mat-accordion *ngIf="todos; else todosError">
-          <mat-expansion-panel #elem [id]="todo.status" *ngFor="let todo of this.filteredTodos">
+          <mat-expansion-panel #elem class="todos" [id]="todo.body" [expanded]="this.isHighlighted(todo)"
+                               *ngFor="let todo of this.filteredTodos">
             <mat-expansion-panel-header>
-
-              <mat-panel-title matTooltip="Status: {{todo.status}}">{{todo.owner}}</mat-panel-title>
+              <mat-panel-title matTooltip="body: {{todo.body}}">{{todo.owner}}</mat-panel-title>
 
             </mat-expansion-panel-header>
-            <mat-panel-description>Body: {{todo.body}}</mat-panel-description>
             <mat-panel-description>Category: {{todo.category}}</mat-panel-description>
-
+            <mat-panel-description>Status: {{todo.status}}</mat-panel-description>
+            <mat-panel-description>Body: {{todo.body}}</mat-panel-description>
           </mat-expansion-panel>
         </mat-accordion>
-        <!-- Maybe this should be a pop-up instead of just a text message? Not sure. -->
+        <!-- Maybe this should be a pop-up instead of just a text messstatus? Not sure. -->
         <ng-template #todosError>
           <mat-error>
             There was a problem loading the todos. Possibly the server is down or perhaps there are network

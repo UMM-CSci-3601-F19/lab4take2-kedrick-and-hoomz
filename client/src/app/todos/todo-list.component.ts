@@ -3,6 +3,7 @@ import {TodoListService} from './todo-list.service';
 import {Todo} from './todo';
 import {Observable} from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import {AddTodoComponent} from './add-todo.component';
 
 @Component({
   selector: 'app-todo-list-component',
@@ -16,14 +17,14 @@ export class TodoListComponent implements OnInit {
   public filteredTodos: Todo[];
 
   // These are the target values used in searching.
-  // We should reowner them to make that clearer.
+  // We should rename them to make that clearer.
   public todoOwner: string;
   public todoStatus: boolean;
-  public todoBody: string;
   public todoCategory: string;
+  public todoBody: string;
 
   // The ID of the
-  private highlightedID = '';
+  private highlightedID: string = '';
 
   // Inject the TodoListService into this component.
   constructor(public todoListService: TodoListService, public dialog: MatDialog) {
@@ -34,13 +35,47 @@ export class TodoListComponent implements OnInit {
     return todo._id['$oid'] === this.highlightedID;
   }
 
+  openDialog(): void {
+    const newTodo: Todo = {_id: '', owner: '', status: true, category: '', body: ''};
+    const dialogRef = this.dialog.open(AddTodoComponent, {
+      width: '500px',
+      data: {todo: newTodo}
+    });
+
+    // tslint:disable-next-line:no-shadowed-variable
+    dialogRef.afterClosed().subscribe(newTodo => {
+      if (newTodo != null) {
+        this.todoListService.addNewTodo(newTodo).subscribe(
+          result => {
+            this.highlightedID = result;
+            this.refreshTodos();
+          },
+          err => {
+            // This should probably be turned into some sort of meaningful response.
+            console.log('There was an error adding the todo.');
+            console.log('The newTodo or dialogResult was ' + newTodo);
+            console.log('The error was ' + JSON.stringify(err));
+          });
+      }
+    });
+  }
+
   public updateOwner(newOwner: string): void {
     this.todoOwner = newOwner;
     this.updateFilter();
   }
 
-  public updateStatus(newStatus: boolean): void {
-    this.todoStatus = newStatus;
+  public updateStatus(newStatus: string): void {
+    newStatus = newStatus.toLowerCase();
+    if (newStatus === 'complete' || newStatus === 'true') {
+      this.todoStatus = true;
+    }
+    if (newStatus === 'incomplete' || newStatus === 'false') {
+      this.todoStatus = false;
+    }
+    if (newStatus === '') {
+      this.todoStatus = null;
+    }
     this.updateFilter();
   }
 
@@ -59,8 +94,10 @@ export class TodoListComponent implements OnInit {
       this.todoListService.filterTodos(
         this.todos,
         this.todoOwner,
-        this.todoBody,
-        this.todoStatus);
+        this.todoStatus,
+        this.todoCategory,
+        this.todoBody
+      );
   }
 
   /**
@@ -87,7 +124,7 @@ export class TodoListComponent implements OnInit {
   }
 
   loadService(): void {
-    this.todoListService.getTodos().subscribe(
+    this.todoListService.getTodos(this.todoOwner).subscribe(
       todos => {
         this.todos = todos;
         this.filteredTodos = this.todos;
