@@ -3,7 +3,7 @@ import {Todo} from './todo';
 import {TodoComponent} from './todo.component';
 import {TodoListService} from './todo-list.service';
 import {Observable} from 'rxjs/Observable';
-import {CustomModule} from "../custom.module";
+import {CustomModule} from '../custom.module';
 
 describe('Todo component', () => {
 

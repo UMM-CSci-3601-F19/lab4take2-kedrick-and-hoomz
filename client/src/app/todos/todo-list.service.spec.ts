@@ -83,36 +83,36 @@ describe('Todo list service: ', () => {
     req.flush(testTodos);
   });
 
-  it('getTodos(todoCategory) adds appropriate param string to called URL', () => {
-    todoListService.getTodos('m').subscribe(
-      todos => expect(todos).toEqual(mTodos)
-    );
-
-    const req = httpTestingController.expectOne(todoListService.baseUrl + '?body=m&');
-    expect(req.request.method).toEqual('GET');
-    req.flush(mTodos);
-  });
-
-  it('filterByCategory(todoCategory) deals appropriately with a URL that already had a body', () => {
-    currentlyImpossibleToGenerateSearchTodoUrl = todoListService.baseUrl + '?body=f&something=k&';
-    todoListService['todoUrl'] = currentlyImpossibleToGenerateSearchTodoUrl;
-    todoListService.filterByCategory('v');
-    expect(todoListService['todoUrl']).toEqual(todoListService.baseUrl + '?something=k&body=m&');
-  });
-
-  it('filterByCategory(todoCategory) deals appropriately with a URL that already had some filtering, but no body', () => {
-    currentlyImpossibleToGenerateSearchTodoUrl = todoListService.baseUrl + '?something=k&';
-    todoListService['todoUrl'] = currentlyImpossibleToGenerateSearchTodoUrl;
-    todoListService.filterByCategory('s');
-    expect(todoListService['todoUrl']).toEqual(todoListService.baseUrl + '?something=k&body=m&');
-  });
-
-  it('filterByCategory(todoCategory) deals appropriately with a URL has the keyword body, but nothing after the =', () => {
-    currentlyImpossibleToGenerateSearchTodoUrl = todoListService.baseUrl + '?body=&';
-    todoListService['todoUrl'] = currentlyImpossibleToGenerateSearchTodoUrl;
-    todoListService.filterByCategory('');
-    expect(todoListService['todoUrl']).toEqual(todoListService.baseUrl + '');
-  });
+  // it('getTodos(todoCategory) adds appropriate param string to called URL', () => {
+  //   todoListService.getTodos('m').subscribe(
+  //     todos => expect(todos).toEqual(mTodos)
+  //   );
+  //
+  //   const req = httpTestingController.expectOne(todoListService.baseUrl + '?body=m&');
+  //   expect(req.request.method).toEqual('GET');
+  //   req.flush(mTodos);
+  // });
+  //
+  // it('filterByCategory(todoCategory) deals appropriately with a URL that already had a body', () => {
+  //   currentlyImpossibleToGenerateSearchTodoUrl = todoListService.baseUrl + '?body=f&something=k&';
+  //   todoListService['todoUrl'] = currentlyImpossibleToGenerateSearchTodoUrl;
+  //   todoListService.filterByCategory('v');
+  //   expect(todoListService['todoUrl']).toEqual(todoListService.baseUrl + '?something=k&body=m&');
+  // });
+  //
+  // it('filterByCategory(todoCategory) deals appropriately with a URL that already had some filtering, but no body', () => {
+  //   currentlyImpossibleToGenerateSearchTodoUrl = todoListService.baseUrl + '?something=k&';
+  //   todoListService['todoUrl'] = currentlyImpossibleToGenerateSearchTodoUrl;
+  //   todoListService.filterByCategory('s');
+  //   expect(todoListService['todoUrl']).toEqual(todoListService.baseUrl + '?something=k&body=m&');
+  // });
+  //
+  // it('filterByCategory(todoCategory) deals appropriately with a URL has the keyword body, but nothing after the =', () => {
+  //   currentlyImpossibleToGenerateSearchTodoUrl = todoListService.baseUrl + '?body=&';
+  //   todoListService['todoUrl'] = currentlyImpossibleToGenerateSearchTodoUrl;
+  //   todoListService.filterByCategory('');
+  //   expect(todoListService['todoUrl']).toEqual(todoListService.baseUrl + '');
+  // });
 
   it('getTodoById() calls api/todos/id', () => {
     const targetTodo: Todo = testTodos[1];
@@ -129,20 +129,20 @@ describe('Todo list service: ', () => {
 
   it('todo list filters by owner', () => {
     expect(testTodos.length).toBe(3);
-    let todoOwner = 'p';
+    const todoOwner = 'p';
     expect(todoListService.filterTodos(testTodos, todoOwner, null, null, null).length).toBe(1);
   });
 
   it('todo list filters by status', () => {
     expect(testTodos.length).toBe(3);
-    let todoStatus = true;
+    const todoStatus = true;
     expect(todoListService.filterTodos(testTodos, null, todoStatus, null, null).length).toBe(2);
   });
 
   it('todo list filters by owner and status', () => {
     expect(testTodos.length).toBe(3);
-    let todoStatus = true;
-    let todoOwner = 'c';
+    const todoStatus = true;
+    const todoOwner = 'c';
     expect(todoListService.filterTodos(testTodos, todoOwner, todoStatus, null, null).length).toBe(1);
   });
 

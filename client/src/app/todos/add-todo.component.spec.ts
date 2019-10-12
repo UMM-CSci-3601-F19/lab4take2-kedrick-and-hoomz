@@ -4,8 +4,8 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
 import {AddTodoComponent} from './add-todo.component';
 import {CustomModule} from '../custom.module';
-import {By} from "@angular/platform-browser";
-import {NgForm} from "@angular/forms";
+import {By} from '@angular/platform-browser';
+import {NgForm} from '@angular/forms';
 
 describe('Add todo component', () => {
 
